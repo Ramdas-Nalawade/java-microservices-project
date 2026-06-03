@@ -3,6 +3,7 @@ package com.app.quiz.controller;
 import com.app.quiz.model.Question;
 import com.app.quiz.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +32,17 @@ public class QuestionController
     public ResponseEntity<String> addQuestion(@RequestBody Question question)
     {
         return questionService.addQuestion(question);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteQuestion(@PathVariable int id)
+    {
+        return (questionService.deleteQuestion(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateQuestion(@PathVariable int id, @RequestBody Question question)
+    {
+        return questionService.updateQuestion(id, question);
     }
 }

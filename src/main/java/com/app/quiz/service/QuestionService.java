@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService
@@ -54,5 +55,49 @@ public class QuestionService
             e.printStackTrace();
         }
         return new ResponseEntity<>("Failed to add question.", HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<String> deleteQuestion(int id)
+    {
+        try
+        {
+            Optional<Question> question = questionRepo.findById(id);
+            if(question.isPresent())
+            {
+                questionRepo.deleteById(id);
+                return new ResponseEntity<>("Question deleted", HttpStatus.OK);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("Question not found", HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<String> updateQuestion(int id, Question updatedQuestion)
+    {
+        try
+        {
+            Optional<Question> question = questionRepo.findById(id);
+            if(question.isPresent())
+            {
+                Question q = question.get();
+                q.setQuestionTitle(updatedQuestion.getQuestionTitle());
+                q.setCategory(updatedQuestion.getCategory());
+                q.setDifficultyLevel(updatedQuestion.getDifficultyLevel());
+                q.setOption1(updatedQuestion.getOption1());
+                q.setOption2(updatedQuestion.getOption2());
+                q.setOption3(updatedQuestion.getOption3());
+                q.setOption4(updatedQuestion.getOption4());
+                q.setRightAnswer(updatedQuestion.getRightAnswer());
+
+                questionRepo.save(q);
+                return new ResponseEntity<String>("Question updated", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return new ResponseEntity<String>("Question not found", HttpStatus.NOT_FOUND);
     }
 }
