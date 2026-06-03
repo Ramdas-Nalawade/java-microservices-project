@@ -22,4 +22,10 @@ public class QuestionService
     {
         return questionRepo.findByCategory(type);
     }
+
+    public String addQuestion(Question question)
+    {
+        questionRepo.save(question);
+        return "Success";
+    }
 }

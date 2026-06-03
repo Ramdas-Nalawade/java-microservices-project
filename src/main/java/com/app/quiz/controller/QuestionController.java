@@ -3,10 +3,7 @@ package com.app.quiz.controller;
 import com.app.quiz.model.Question;
 import com.app.quiz.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,8 +21,14 @@ public class QuestionController
     }
 
     @GetMapping("/category/{type}")
-    public List<Question> getAllQuestions(@RequestParam String type)
+    public List<Question> getAllQuestions(@PathVariable String type)
     {
         return questionService.findByCategory(type);
+    }
+
+    @PostMapping("/add")
+    public String addQuestion(@RequestBody Question question)
+    {
+        return questionService.addQuestion(question);
     }
 }
