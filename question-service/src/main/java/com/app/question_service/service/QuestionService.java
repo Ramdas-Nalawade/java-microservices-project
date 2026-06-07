@@ -1,6 +1,8 @@
 package com.app.question_service.service;
 
 import com.app.question_service.model.Question;
+import com.app.question_service.model.QuestionWrapper;
+import com.app.question_service.model.Response;
 import com.app.question_service.repo.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,5 +101,49 @@ public class QuestionService
             e.getMessage();
         }
         return new ResponseEntity<String>("Question not found", HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<List<Integer>> generateQuestions(String category, Integer numQ)
+    {
+        List<Integer> questions = questionRepo.createQuizByCategory(category, numQ);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(List<Integer> questionIds)
+    {
+        List<QuestionWrapper> wrappers = new ArrayList<>();
+        List<Question> questions = new ArrayList<>();
+
+        for(Integer id: questionIds)
+        {
+            questions.add(questionRepo.findById(id).get());
+        }
+
+        for(Question q: questions)
+        {
+            QuestionWrapper question = new QuestionWrapper();
+            question.setId(q.getId());
+            question.setQuestionTitle(q.getQuestionTitle());
+            question.setOption1(q.getOption1());
+            question.setOption2(q.getOption2());
+            question.setOption3(q.getOption3());
+            question.setOption4(q.getOption4());
+            wrappers.add(question);
+        }
+
+        return new ResponseEntity<>(wrappers, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Integer> calculateScore(List<Response> responses)
+    {
+        int right = 0;
+
+        for(Response response: responses)
+        {
+            Question question = questionRepo.findById(response.getId()).get();
+            if(question.getRightAnswer().equals(response.getResponse()))
+                right++;
+        }
+        return new ResponseEntity<>(right, HttpStatus.OK);
     }
 }

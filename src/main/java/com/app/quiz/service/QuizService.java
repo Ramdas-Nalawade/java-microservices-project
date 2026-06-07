@@ -51,7 +51,7 @@ public class QuizService
         return new ResponseEntity<>(questionDTOList, HttpStatus.OK);
     }
 
-    public ResponseEntity<Integer> calculateREsult(Integer id, List<Response> responses)
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> responses)
     {
         Optional<Quiz> quiz = quizRepo.findById(id);
         List<Question> questions = quiz.get().getQuestions();

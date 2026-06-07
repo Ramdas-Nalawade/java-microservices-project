@@ -13,6 +13,6 @@ public interface QuestionRepo extends JpaRepository<Question, Integer>
 {
     List<Question> findByCategory(String type);
 
-    @Query(value = "SELECT * FROM question q WHERE q.category=:category ORDER BY RANDOM() LIMIT :numOfQuestions", nativeQuery = true)
-    List<Question> createQuizByCategory(@Param("category") String category, @Param("numOfQuestions") int numOfQuestions);
+    @Query(value = "SELECT q.id FROM question q WHERE q.category=:category ORDER BY RANDOM() LIMIT :numOfQuestions", nativeQuery = true)
+    List<Integer> createQuizByCategory(@Param("category") String category, @Param("numOfQuestions") int numOfQuestions);
 }

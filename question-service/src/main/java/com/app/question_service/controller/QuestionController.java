@@ -1,6 +1,8 @@
 package com.app.question_service.controller;
 
 import com.app.question_service.model.Question;
+import com.app.question_service.model.QuestionWrapper;
+import com.app.question_service.model.Response;
 import com.app.question_service.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +45,26 @@ public class QuestionController
     public ResponseEntity<String> updateQuestion(@PathVariable int id, @RequestBody Question question)
     {
         return questionService.updateQuestion(id, question);
+    }
+
+    @GetMapping("/generate")
+    public ResponseEntity<List<Integer>> generateQuestionsForQuiz
+            (@RequestParam String category, @RequestParam Integer numQ)
+    {
+        return questionService.generateQuestions(category, numQ);
+    }
+
+    @PostMapping("/getQuestions")
+    public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId
+            (@RequestBody List<Integer> questionIds)
+    {
+        return questionService.getQuestionsFromId(questionIds);
+    }
+
+    @PostMapping("/getScore")
+    public ResponseEntity<Integer> getScore
+                (@RequestBody List<Response> responses)
+    {
+        return questionService.calculateScore(responses);
     }
 }
